@@ -40,7 +40,6 @@ export default function Quote() {
         />
       }
     >
-      {/* <Text>{quote}</Text> */}
       <View style={styles.quoteContainer} elevation={7}>
         <SingleQuote quote={quote} bgColor={bgColor} lineColor={lineColor} />
       </View>
@@ -57,6 +56,6 @@ const styles = StyleSheet.create({
   },
   quoteContainer: {
     height: Dimensions.get('window').height * 0.60,
-    width: Dimensions.get('window').width * 0.80, 
+    width: Dimensions.get('window').width * 0.80,
   }
 })
