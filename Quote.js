@@ -4,8 +4,10 @@ import FontAwesome, {SolidIcons} from 'react-native-fontawesome'
 import LinearGradient from 'react-native-linear-gradient';
 import { QuoteList } from "./QuoteList";
 import SingleQuote from "./SingleQuote";
+import * as Font from './assets/fonts/Caveat-Bold.ttf'
 
 export default function Quote() {
+  console.log(Font)
   // const bgColors = ["#F0C2C2", "#C2E2F0", "#D6C2F0", "#F0C2E8", "#CBF0C2"];
   // const lineColors = ["#E41D1D", "#1D31E4", "#8D1DE4", "#E41DD0", "#1EB024"];
   const bgColors = ["#C2E2F0", "#F0C2EE", "#DFF0C2", "#FDE9A4", "#CBFDA4", "#FDC9A4"];

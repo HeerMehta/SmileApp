@@ -32,5 +32,3 @@ export default function SingleQuote({ quote, bgColor, lineColor, fontColor }) {
     </View>
   )
 }
-
-
