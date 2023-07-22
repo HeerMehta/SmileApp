@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import { ScrollView, RefreshControl, Text, View, StyleSheet, Dimensions, StatusBar, } from "react-native";
-import FontAwesome, {SolidIcons} from 'react-native-fontawesome'
+import { ScrollView, RefreshControl, Text, View, StyleSheet, Dimensions, StatusBar, Button, } from "react-native";
 import LinearGradient from 'react-native-linear-gradient';
 import { QuoteList } from "./QuoteList";
 import SingleQuote from "./SingleQuote";
-import * as Font from './assets/fonts/Caveat-Bold.ttf'
 
 export default function Quote() {
-  console.log(Font)
-  // const bgColors = ["#F0C2C2", "#C2E2F0", "#D6C2F0", "#F0C2E8", "#CBF0C2"];
-  // const lineColors = ["#E41D1D", "#1D31E4", "#8D1DE4", "#E41DD0", "#1EB024"];
   const bgColors = ["#C2E2F0", "#F0C2EE", "#DFF0C2", "#FDE9A4", "#CBFDA4", "#FDC9A4"];
   const lineColors = ["#F0C2C2", "#F0DEC2", "#ECC2F0", "#C3C2F0", "#C2EDF0", "#F0C2EB"];
   const fontColors = ["#6C6AB9", "#74B26A", "#B2916A", "#B26A91", "#CD7ABF", "#6B88AA"];
@@ -71,7 +66,6 @@ export default function Quote() {
           padding: 10,
           backgroundColor: `${lineColor}`,
           width: "100%",
-          // borderWidth: 1
         }}>
 
         </View>
