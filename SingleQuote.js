@@ -1,15 +1,42 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Button } from 'react-native'
 import Icon from 'react-native-vector-icons/Octicons';
-import ReactCurvedText from "react-curved-text";
 import Share from 'react-native-share';
+import ViewShot, { captureRef } from 'react-native-view-shot';
+
+import { img } from './ShareImage';
+import { useRef } from 'react';
 
 export default function SingleQuote({ quote, bgColor, lineColor, fontColor }) {
-  console.log(lineColor);
-  console.log(bgColor);
+  const demoref = useRef();
+  // const [src, setSrc] = useState(null);
+  console.log(captureRef);
+
+  const captureImage = () => {
+    demoref.current.capture().then((e) => {
+      console.log(e);
+      const sharimg = "data:image/png;base64," + e;
+      handleShare(sharimg);
+    }).catch(e => console.log(e));
+  }
   const text = "Click me to read a new quote"
+  const handleShare = async (sharimg) => {
+    const options = {
+      message: "Hii",
+      url: sharimg
+    }
+    try {
+      await Share.open(options);
+      console.log("SUCCESS")
+    }
+    catch {
+      console.log("ERROR")
+    }
+  }
   return (
+    
     <View style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center', height: 100 }}>
+      
       <View style={{
         borderWidth: 5,
         borderColor: `${fontColor}`,
@@ -40,5 +67,6 @@ export default function SingleQuote({ quote, bgColor, lineColor, fontColor }) {
         }} />
       </View>
     </View>
+    
   )
 }

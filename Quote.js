@@ -1,8 +1,14 @@
-import React, { useState } from "react";
-import { ScrollView, RefreshControl, Text, View, StyleSheet, Dimensions, StatusBar, Button, } from "react-native";
+import React, { useState, useRef } from "react";
+import { ScrollView, RefreshControl, Text, View, StyleSheet, Dimensions, StatusBar, Button, TouchableOpacity, } from "react-native";
+
 import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Octicons';
+import Share from 'react-native-share';
+import ViewShot, { captureRef } from 'react-native-view-shot';
+
 import { QuoteList } from "./QuoteList";
 import SingleQuote from "./SingleQuote";
+
 
 export default function Quote() {
   const bgColors = ["#C2E2F0", "#F0C2EE", "#DFF0C2", "#FDE9A4", "#CBFDA4", "#FDC9A4"];
@@ -14,7 +20,29 @@ export default function Quote() {
   const [lineColor, setLineColor] = useState(lineColors[0]);
   const [fontColor, setFontColor] = useState(fontColors[0]);
 
+  const demoref = useRef();
+  // const [src, setSrc] = useState(null);
+  console.log(captureRef);
 
+  const captureImageAndShare = () => {
+    demoref.current.capture().then((img) => {
+      const sharimg = "data:image/png;base64," + img;
+      handleShare(sharimg);
+    }).catch(err => console.log(err));
+  }
+  const handleShare = async (sharimg) => {
+    const options = {
+      message: "Hey, let's Smile together with YourSmile quotes !!! Download YourSmile app now...",
+      url: sharimg
+    }
+    try {
+      await Share.open(options);
+      console.log("SUCCESS")
+    }
+    catch {
+      console.log("ERROR")
+    }
+  }
 
   const onRefresh = () => {
     console.log("first")
@@ -36,39 +64,62 @@ export default function Quote() {
       <StatusBar backgroundColor="#fff" />
       <View style={{
         height: 50,
-        padding: 10,
-        backgroundColor: "#fff"
+        paddingTop: 5,
+        backgroundColor: "#fff",
+        width: '100%',
+        display: 'flex',
+        paddingHorizontal: 5,
+        justifyContent: 'space-evenly',
+        flexDirection: 'row'
       }}>
-        <Text style={styles.title}>Please Smile</Text>
+        <View>
+        <Icon name="smiley" size={40} style={{
+          color: `${fontColor}`,
+          backgroundColor: "#fff",
+          borderRadius: 20
+        }} />
+        </View>
+        <Text style={[styles.title, { color: `${fontColor}` }]}>YourSmile</Text>
+        <TouchableOpacity style={styles.shareButton} onPress={captureImageAndShare}>
+          <Icon name="share-android" size={30} style={{ color: `${fontColor}`}} />
+        </TouchableOpacity>
       </View>
-      <LinearGradient colors={['#fff',`${bgColor}`, `${lineColor}`]} style={styles.container}>
-      <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
-        refreshControl={
-          <RefreshControl
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-            tintColor="#222"
-            title="Pull to refresh"
-          />
-        }
-      >
-        <View style={styles.mainContainer}>
-          <View style={styles.quoteContainer} elevation={7}>
-            <SingleQuote quote={quote} bgColor={bgColor} lineColor={lineColor} fontColor={"#836953"}/>
-          </View>
-        </View>
-      </ScrollView>
-      </LinearGradient>
-      <View style={{
-          height: 100,
-          padding: 10,
-          backgroundColor: `${lineColor}`,
-          width: "100%",
-        }}>
+      <ViewShot ref={demoref} options={{ format: "jpg", quality: 0.9, result: "base64" }}>
+        <LinearGradient colors={['#fff', `${bgColor}`, `${lineColor}`]} style={styles.container}>
+          <ScrollView
+            style={styles.container}
+            contentContainerStyle={{ alignItems: 'center', justifyContent: 'center' }}
+            refreshControl={
+              <RefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                tintColor="#222"
+                title="Pull to refresh"
+              />
+            }
+          >
+            <View style={styles.mainContainer}>
+              <View style={styles.quoteContainer} elevation={7}>
+                <SingleQuote quote={quote} bgColor={bgColor} lineColor={lineColor} fontColor={"#836953"} />
+              </View>
+            </View>
+          </ScrollView>
+        </LinearGradient>
+      </ViewShot>
 
-        </View>
+      <View style={{
+        height: 100,
+        padding: 10,
+        backgroundColor: `${lineColor}`,
+        width: "100%",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        <TouchableOpacity onPress={onRefresh} style={[styles.refreshButton, { backgroundColor: `${fontColor}` }]} elevation={20}>
+          <Text style={styles.refreshButtonText}>Pull refresh or Click me to get more smiles</Text>
+        </TouchableOpacity>
+      </View>
     </View>
 
   )
@@ -76,12 +127,12 @@ export default function Quote() {
 
 const styles = StyleSheet.create({
   container: {
-    height: Dimensions.get('window').height - 100,
+    height: Dimensions.get('window').height - 150,
     display: 'flex',
   },
   mainContainer: {
     width: "100%",
-    height: Dimensions.get('window').height - 100,
+    height: Dimensions.get('window').height - 150,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -91,10 +142,32 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').width * 0.80,
   },
   title: {
-    fontSize: 25,
-    color: '#836953',
-    fontWeight: "400",
-    textAlign: 'center'
+    width: Dimensions.get('window').width * 0.50,
+    textAlign: 'center',
+    fontSize: 35,
+    fontFamily: 'Caveat-Medium',
   },
+  shareButton: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+    },
+  refreshButton: {
+    width: Dimensions.get('window').width * 0.8,
+    padding: 5,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 20,
+    position: 'relative',
+    bottom: 50
+  },
+  refreshButtonText: {
+    textAlign: 'center',
+    fontSize: 27,
+    color: "#fff",
+    fontFamily: 'Caveat-Regular'
+  }
 })
 
